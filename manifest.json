@@ -1,0 +1,17 @@
+{
+  "name": "Follow HN",
+  "version": "1.0",
+  "description": "Augments the HN website by letting you follow users, and adding a stream of their most recent comments to the page.",
+  "permissions": [
+    "storage",
+    "https://hacker-news.firebaseio.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://news.ycombinator.com/*"],
+      "js": ["jquery.js","firebase.js","follow-hn.js"],
+      "css": ["follow-hn.css"]
+    }
+  ],
+  "manifest_version": 2
+}

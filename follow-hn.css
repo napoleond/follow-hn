@@ -1,0 +1,42 @@
+#follow-hn-feed {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  bottom: 0;
+  right: -188px;
+  overflow: auto;
+  width:200px;
+  background-color: #828282;
+  margin: 0;
+  padding: 0;
+  border-left: 1px solid #000;
+  transition: right 0.5s;
+}
+
+#follow-hn-feed:hover {
+  right:0;
+}
+
+#follow-hn-feed ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#follow-hn-feed ul li {
+  margin: 0;
+  padding: 0;
+}
+
+a.follow-hn-feed-item {
+  display: block;
+  padding: 0.5em 12px;
+  font-size: 0.8em;
+  border-bottom: 1px solid black;
+  color: #bbb !important;
+}
+
+a.follow-hn-feed-item.new {
+  background-color: #ff6600;
+  color: #000 !important;
+}
