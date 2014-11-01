@@ -1,16 +1,41 @@
-#follow-hn-feed {
+#follow-hn-wrapper {
   position: fixed;
   z-index: 1000;
   top: 0;
   bottom: 0;
-  right: -188px;
-  overflow: auto;
+  right: -190px;
+  width:230px;
+  margin:0;
+  padding:0;
+  transition: right 0.5s;
+}
+
+#follow-hn-wrapper.visible {
+  right:0;
+}
+
+#follow-hn-show-feed {
+  display: block;
+  float:right;
+  width:30px;
+  height:30px;
+  color:#fff;
+  font-size:30px;
+  background-color:#ff6600;
+  overflow: hidden;
+  text-align:center;
+  box-shadow: -1px 1px 0px rgba(0,0,0,0.15);
+}
+
+#follow-hn-feed {
+  float:right;
+  height:100%;
   width:200px;
+  overflow: auto;
   background-color: #828282;
   margin: 0;
   padding: 0;
-  border-left: 1px solid #000;
-  transition: right 0.5s;
+  box-shadow: -1px 1px 0px rgba(0,0,0,0.15);
 }
 
 #follow-hn-feed:hover {
@@ -32,11 +57,15 @@ a.follow-hn-feed-item {
   display: block;
   padding: 0.5em 12px;
   font-size: 0.8em;
-  border-bottom: 1px solid black;
-  color: #bbb !important;
+  border-left:10px solid #828282;
+  color: #000 !important;
+  background-color:#f6f6ef;
+}
+
+a.follow-hn-feed-item:hover {
+  background-color:#e6e6df;
 }
 
 a.follow-hn-feed-item.new {
-  background-color: #ff6600;
-  color: #000 !important;
+  border-left:10px solid #ff6600;
 }

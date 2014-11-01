@@ -18,6 +18,7 @@ $(function(){
 
   var init = function (users) {
     userList = users;
+    decorate();
 
     //build initial feed with users and subscribe to changes
     users.forEach(function (id) {
@@ -29,8 +30,13 @@ $(function(){
       subscribe(id);
     });
 
-    var feedDiv = $("<div>").attr('id','follow-hn-feed');
+    var feedDiv = $("<div id='follow-hn-wrapper'><div id='follow-hn-feed'></div><a href='#' id='follow-hn-show-feed'>'</a></div>");
     $('body').append(feedDiv);
+
+    $('#follow-hn-show-feed').click(function(e){
+      e.preventDefault();
+      $('#follow-hn-wrapper').toggleClass("visible");
+    });
   }
 
   var addUser = function (userId) {
@@ -43,6 +49,21 @@ $(function(){
         mergeFeedItems(user.submitted);
       });
       subscribe(userId);
+    });
+  }
+
+  var removeUser = function (userId) {
+    userList = userList.filter(function(id) {
+      return id !== userId;
+    });
+    chrome.storage.sync.set({'users':userList}, function () {
+      //filter out from feed
+      console.log(feedItems.length);
+      feedItems = feedItems.filter(function(item) {
+        return item.by !== userId;
+      });
+      console.log(feedItems.length,feedItems);
+      renderFeedItems();
     });
   }
 
@@ -77,7 +98,7 @@ $(function(){
     //assign new class to anything posted in last 30s
     
     var target = $('#follow-hn-feed');
-    var time = (new Date() / 1000) - 6000;
+    var time = (new Date() / 1000) - 3600;
     feedItems.sort(function (a,b) {
       return b.time - a.time;
     });
@@ -101,19 +122,44 @@ $(function(){
     init(items.users || []);
   });
 
-  $('span.comhead').each(function () {
-    var html = $(this).html();
-    var link = $(this).find('a').first().attr('href');
-    if (link) {
-      var userId = link.replace('user?id=','');
-      $(this).html(html+" | <a href='#' class='follow-hn-add-user' data-user='"+userId+"'>follow user</a>");
-    }
-  });
+  var decorate = function () {
+    $('span.comhead').each(function () {
+      var html = $(this).html();
+      var link = $(this).find('a').first().attr('href');
+      if (link) {
+        var userId = link.replace('user?id=','');
+        if (userList.indexOf(userId) < 0) {
+          $(this).html(html+" | <a href='#' class='follow-hn-add-user' data-user='"+userId+"'>follow user</a>");
+        } else {
+          $(this).html(html+" | <a href='#' class='follow-hn-remove-user' data-user='"+userId+"'>unfollow user</a>");
+        }
+      }
+    });
 
-  $('a.follow-hn-add-user').click(function(e){
-    e.preventDefault();
-    addUser($(e.currentTarget).data('user'));
-  });
+    var handleAddClick = function (e) {
+      e.preventDefault();
+      addUser($(e.currentTarget).data('user'));
+      $(e.currentTarget)
+        .removeClass('follow-hn-add-user')
+        .addClass('follow-hn-remove-user')
+        .html('unfollow user')
+        .one('click.followHN', handleRemoveClick);
+    }
+
+    var handleRemoveClick = function (e) {
+      e.preventDefault();
+      removeUser($(e.currentTarget).data('user'));
+      $(e.currentTarget)
+        .removeClass('follow-hn-remove-user')
+        .addClass('follow-hn-add-user')
+        .html('follow user')
+        .one('click.followHN', handleAddClick);
+    }
+
+    $('a.follow-hn-add-user').one('click.followHN',handleAddClick);
+    $('a.follow-hn-remove-user').one('click.followHN',handleRemoveClick);
+
+  }
 
   var subscribe = function (id) {
     fbUsers.child(id).on('child_changed', function (changed) {
