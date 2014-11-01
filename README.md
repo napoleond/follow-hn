@@ -6,3 +6,9 @@ a feed of recent comments from the users you follow along the right sidebar,
 which can be toggled in and out of view. The only server component to this is 
 Chrome's app storage (to sync between browsers if you're using that feature) 
 and the new HN Firebase API.
+
+TODO:
+
+ - Collect some screenshots
+ - Put together gh-pages
+ - Submit to Chrome store
