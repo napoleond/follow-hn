@@ -9,6 +9,7 @@ and the new HN Firebase API.
 
 TODO:
 
+ - cache feed locally instead of re-fetching every load
  - Collect some screenshots
  - Put together gh-pages
  - Submit to Chrome store
